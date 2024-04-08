@@ -1,0 +1,3 @@
+#shiny-input-text #form-control #shiny-bound-input {
+  background-color: black;
+}

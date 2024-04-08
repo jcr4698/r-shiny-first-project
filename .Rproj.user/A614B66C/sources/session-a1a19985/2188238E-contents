@@ -1,0 +1,73 @@
+library(shiny)
+library(shinythemes)
+data(airquality)
+
+# Define UI
+ui <- fluidPage(
+                theme = shinytheme("slate"),
+  
+                # add styling
+                tags$head(
+                  tags$link(rel="stylesheet", type="text/css", href = "style.css")
+                ),
+                
+                navbarPage(
+                  "My first app",
+                  tabPanel("Navbar 1",
+                           sidebarPanel(
+                             tags$h3("Input:"),
+                             textInput("txt1", "First Name:", ""), # txt1 will be sent to server
+                             textInput("txt2", "Last Name:", ""), # txt2 will be sent to server
+                             
+                           ), # sidebarPanel
+                           mainPanel(
+                             h1("Header 1"),
+                             
+                             h4("Output 1"),
+                             verbatimTextOutput("txtout"), # txtout is generated from server
+                             
+                           ) # mainPanel
+                           
+                  ),
+                  tabPanel("Navbar 2",
+                           sidebarLayout(
+                             sidebarPanel(
+                               sliderInput(inputId="bins",
+                                           label="# of bins:",
+                                           min=1,
+                                           max=50,
+                                           value=30
+                                           )
+                             ),
+                             mainPanel(
+                               plotOutput(outputId="distPlot")
+                             )
+                           )
+                  ),
+                  tabPanel("Navbar 3", "This panel is intentionally left blank")
+                  
+                ) # navbarPage
+) # fluidPage
+
+# Define server function  
+server <- function(input, output) {
+  
+  output$txtout <- renderText({
+    paste(input$txt1, input$txt2, sep = " ")
+  })
+  
+  output$distPlot <- renderPlot({
+    x <- airquality$Ozone
+    x <- na.omit(x)
+    bins <- seq(min(x), max(x), length.out=input$bins + 1)
+    
+    hist(x, breaks=bins, col="#003300", border="black",
+         xlab="Ozone level",
+         main="Histogram of Ozone level"
+    )
+  })
+} # server
+
+
+# Create Shiny object
+shinyApp(ui=ui, server=server)

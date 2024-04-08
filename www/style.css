@@ -1,0 +1,18 @@
+
+.form-control {
+  background-color: black;
+  color: white;
+}
+
+pre {
+  background-color: black;
+  
+  /* Font style */
+  font-family: Sans-Serif;
+  font-size: 25px;
+  color: white;
+}
+
+/*h3 {
+  color: red;
+}*/
